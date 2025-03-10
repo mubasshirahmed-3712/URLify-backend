@@ -20,11 +20,17 @@ mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true, useUnifiedTopol
     process.exit(1); // Exit if DB connection fails
   });
 
-// Middleware
-app.use(cors({
-  origin: process.env.FRONTEND_URL || "http://localhost:3000", // Allow frontend
-  credentials: true, // For session cookies
-}));
+  const allowedOrigins = [
+    'http://localhost:3000', // For local testing
+    'https://myurlify.vercel.app' // For production frontend
+  ];
+  
+  app.use(
+    cors({
+      origin: allowedOrigins,
+      credentials: true, // If you use cookies/sessions
+    })
+  );
 app.use(express.json());
 app.use(helmet());
 app.use(morgan('common'));
